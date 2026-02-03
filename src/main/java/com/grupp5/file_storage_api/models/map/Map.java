@@ -18,11 +18,17 @@ public class Map {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID mapID;
 
+  @Column
+  private String location;
+
   @ManyToOne
   @JoinColumn(nullable = false)
   private User user;
 
   public Map() {}
 
-
+  public Map(String location, User user) {
+    this.location = location;
+    this.user = user;
+  }
 }

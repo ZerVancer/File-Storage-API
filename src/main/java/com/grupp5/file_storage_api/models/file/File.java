@@ -26,4 +26,9 @@ public class File {
   private String content;
 
   public File() {}
+
+  public File(Map map, String content) {
+    this.map = map;
+    this.content = content;
+  }
 }
