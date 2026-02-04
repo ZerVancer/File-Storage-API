@@ -1,6 +1,7 @@
 package com.leo.file_storage_api.controllers.fileController;
 
 import com.leo.file_storage_api.dtos.fileDtos.FileDeletedDto;
+import com.leo.file_storage_api.dtos.fileDtos.FileDownloadedDto;
 import com.leo.file_storage_api.dtos.fileDtos.FileUploadedDto;
 import com.leo.file_storage_api.models.file.File;
 import com.leo.file_storage_api.services.fileService.FileService;
@@ -36,6 +37,15 @@ public class FileController {
     File file = fileService.deleteFile(fileID);
 
     return ResponseEntity.status(HttpStatus.ACCEPTED).body(FileDeletedDto.from(file));
+  }
+
+  @GetMapping("/{fileID}")
+  public ResponseEntity<FileDownloadedDto> downloadFile(
+      @PathVariable UUID fileID
+  ) {
+    File file = fileService.findByFileID(fileID);
+
+    return ResponseEntity.status(HttpStatus.FOUND).body(FileDownloadedDto.from(file));
   }
 
   @GetMapping

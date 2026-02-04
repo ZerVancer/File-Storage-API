@@ -48,7 +48,7 @@ public class FileService {
     return fileRepository.findAll();
   }
 
-  public File getFileByUserID(UUID userID) {
-    return fileRepository.findByMap_User_UserID(userID).orElseThrow(FileNotFoundException::new);
+  public File findByFileID(UUID fileID) {
+    return fileRepository.findByFileID(fileID).orElseThrow(FileNotFoundException::new);
   }
 }
