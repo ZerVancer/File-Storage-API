@@ -29,10 +29,7 @@ public class FileService {
       map = mapService.getMap(mapID);
       if (!mapService.mapBelongsToUser(map, user)) throw new IncorrectUserForMapException();
     } else {
-      if ((map = mapService.findMapByUserIDAndLocation(userID, null)) == null){
-        map = new Map(null, user);
-        mapService.createMap(map);
-      }
+      map = mapService.findMapByUserIDAndLocation(userID, null);
     }
 
     File file = new File(map, content);
