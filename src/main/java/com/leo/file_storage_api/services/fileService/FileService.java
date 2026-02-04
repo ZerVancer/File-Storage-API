@@ -22,7 +22,7 @@ public class FileService {
   private MapService mapService;
   private UserService userService;
 
-  public File saveFile(UUID userID, UUID mapID, String content) {
+  public File saveFile(UUID userID, UUID mapID, String name, String content) {
     Map map;
     User user = userService.getUser(userID);
     if (mapID != null) {
@@ -32,7 +32,7 @@ public class FileService {
       map = mapService.findMapByUserIDAndLocation(userID, null);
     }
 
-    File file = new File(map, content);
+    File file = new File(map, name, content);
 
     return fileRepository.save(file);
   }

@@ -24,7 +24,7 @@ public class MapController {
       @RequestBody CreateMapRequest request
       ){
 
-    Map map = mapService.createMap(userID, request.location());
+    Map map = mapService.createMap(userID, request.name());
 
     return ResponseEntity.status(HttpStatus.CREATED).body(MapRegisteredDto.from(map));
   }

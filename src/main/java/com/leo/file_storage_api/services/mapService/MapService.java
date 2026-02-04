@@ -18,10 +18,10 @@ public class MapService {
 
   private UserService userService;
 
-  public Map createMap(UUID userID, String location) {
+  public Map createMap(UUID userID, String name) {
     User user = userService.getUser(userID);
 
-    return mapRepository.save(new Map(location, user));
+    return mapRepository.save(new Map(name, user));
   }
 
   public List<Map> getAll() {

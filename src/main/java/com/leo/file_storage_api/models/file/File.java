@@ -23,12 +23,16 @@ public class File {
   private Map map;
 
   @Column
+  private String name;
+
+  @Column
   private String content;
 
   public File() {}
 
-  public File(Map map, String content) {
+  public File(Map map, String name, String content) {
     this.map = map;
+    this.name = name;
     this.content = content;
   }
 }

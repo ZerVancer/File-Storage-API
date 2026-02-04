@@ -23,9 +23,10 @@ public class FileController {
   public ResponseEntity<FileUploadedDto> uploadFile(
       @PathVariable UUID userID,
       @RequestHeader(value = "mapID", required = false) UUID mapID,
+      @RequestHeader("name") String name,
       @RequestBody String content) {
 
-    File file = fileService.saveFile(userID, mapID, content);
+    File file = fileService.saveFile(userID, mapID, name, content);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(FileUploadedDto.from(file));
   }

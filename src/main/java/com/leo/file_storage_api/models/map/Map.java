@@ -19,7 +19,7 @@ public class Map {
   private UUID mapID;
 
   @Column
-  private String location;
+  private String name;
 
   @ManyToOne
   @JoinColumn(nullable = false)
@@ -27,8 +27,8 @@ public class Map {
 
   public Map() {}
 
-  public Map(String location, User user) {
-    this.location = location;
+  public Map(String name, User user) {
+    this.name = name;
     this.user = user;
   }
 }
