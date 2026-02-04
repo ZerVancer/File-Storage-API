@@ -45,7 +45,7 @@ public class FileController {
   ) {
     File file = fileService.findByFileID(fileID);
 
-    return ResponseEntity.status(HttpStatus.FOUND).body(FileDownloadedDto.from(file));
+    return ResponseEntity.ok(FileDownloadedDto.from(file));
   }
 
   @GetMapping

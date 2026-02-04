@@ -7,7 +7,7 @@ import java.util.UUID;
 public record FileDownloadedDto(
     UUID fileID,
     UUID userID,
-    String cointent
+    String content
 ) {
   public static FileDownloadedDto from(File file) {
     return new FileDownloadedDto(file.getFileID(), file.getMap().getUser().getUserID(), file.getContent());
