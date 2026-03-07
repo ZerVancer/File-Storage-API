@@ -1,5 +1,6 @@
 package com.leo.file_storage_api.controllers.mapController;
 
+import com.leo.file_storage_api.dtos.mapDtos.MapGetDto;
 import com.leo.file_storage_api.dtos.mapDtos.MapRegisteredDto;
 import com.leo.file_storage_api.models.map.Map;
 import com.leo.file_storage_api.requests.mapRequests.CreateMapRequest;
@@ -27,6 +28,13 @@ public class MapController {
     Map map = mapService.createMap(userID, request.name());
 
     return ResponseEntity.status(HttpStatus.CREATED).body(MapRegisteredDto.from(map));
+  }
+
+  @GetMapping("/{mapID}")
+  public ResponseEntity<MapGetDto> getMapById(
+      @RequestParam UUID mapID
+  ) {
+    return ResponseEntity.ok(MapGetDto.from(mapService.getMap(mapID)));
   }
 
   @GetMapping

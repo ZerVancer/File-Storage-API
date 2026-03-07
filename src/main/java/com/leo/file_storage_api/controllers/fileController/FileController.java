@@ -2,6 +2,7 @@ package com.leo.file_storage_api.controllers.fileController;
 
 import com.leo.file_storage_api.dtos.fileDtos.FileDeletedDto;
 import com.leo.file_storage_api.dtos.fileDtos.FileDownloadedDto;
+import com.leo.file_storage_api.dtos.fileDtos.FileGetDto;
 import com.leo.file_storage_api.dtos.fileDtos.FileUploadedDto;
 import com.leo.file_storage_api.models.file.File;
 import com.leo.file_storage_api.services.fileService.FileService;
@@ -44,7 +45,7 @@ public class FileController {
   public ResponseEntity<FileDownloadedDto> downloadFile(
       @PathVariable UUID fileID
   ) {
-    File file = fileService.findByFileID(fileID);
+    File file = fileService.getByFileID(fileID);
 
     return ResponseEntity.ok(FileDownloadedDto.from(file));
   }

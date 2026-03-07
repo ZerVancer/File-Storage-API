@@ -19,7 +19,7 @@ public class UserService {
   private MapRepository mapRepository;
 
   public User createUser(String eMail, String password) {
-    if (userRepository.findByEMail(eMail).isPresent()) {
+    if (userRepository.findByeMail(eMail).isPresent()) {
       throw new EMailAlreadyExistsException();
     }
 

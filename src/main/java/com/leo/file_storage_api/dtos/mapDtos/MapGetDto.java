@@ -1,6 +1,5 @@
 package com.leo.file_storage_api.dtos.mapDtos;
 
-import com.leo.file_storage_api.controllers.mapController.MapController;
 import com.leo.file_storage_api.controllers.userController.UserController;
 import com.leo.file_storage_api.models.map.Map;
 import lombok.Getter;
@@ -14,22 +13,22 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Getter
 @Setter
-public class MapRegisteredDto extends RepresentationModel<MapRegisteredDto> {
+public class MapGetDto extends RepresentationModel<MapGetDto> {
 
   private final UUID mapID;
   private String name;
 
-  public MapRegisteredDto(UUID mapID, String name) {
+  public MapGetDto(UUID mapID, String name) {
     this.mapID = mapID;
     this.name = name;
   }
 
-  public static MapRegisteredDto from(Map map) {
-    var response = new MapRegisteredDto(map.getMapID(), map.getName());
+  public static MapGetDto from(Map map) {
+    var response = new MapGetDto(map.getMapID(), map.getName());
 
     response.add(linkTo(
         methodOn(UserController.class).getUserById(map.getUser().getUserID())
-    ).withRel("map"));
+    ).withRel("user"));
 
     return response;
   }

@@ -38,7 +38,7 @@ public class FileService {
   }
 
   public File deleteFile(UUID fileID) {
-    File file = fileRepository.findByFileID(fileID).orElse(null);
+    File file = fileRepository.getByFileID(fileID).orElse(null);
     fileRepository.deleteById(fileID);
 
     return file;
@@ -48,7 +48,7 @@ public class FileService {
     return fileRepository.findAll();
   }
 
-  public File findByFileID(UUID fileID) {
-    return fileRepository.findByFileID(fileID).orElseThrow(FileNotFoundException::new);
+  public File getByFileID(UUID fileID) {
+    return fileRepository.getByFileID(fileID).orElseThrow(FileNotFoundException::new);
   }
 }

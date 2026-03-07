@@ -1,16 +1,38 @@
 package com.leo.file_storage_api.dtos.fileDtos;
 
+import com.leo.file_storage_api.controllers.userController.UserController;
 import com.leo.file_storage_api.models.file.File;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.UUID;
 
-public record FileDownloadedDto(
-    UUID fileID,
-    UUID userID,
-    String name,
-    String content
-) {
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+@Getter
+@Setter
+public class FileDownloadedDto extends RepresentationModel<FileDownloadedDto> {
+
+  private final UUID fileID;
+  private UUID userID;
+  private String name;
+  private String content;
+
+  public FileDownloadedDto(UUID fileID, String name, String content) {
+    this.fileID = fileID;
+    this.name = name;
+    this.content = content;
+  }
+
   public static FileDownloadedDto from(File file) {
-    return new FileDownloadedDto(file.getFileID(), file.getMap().getUser().getUserID(), file.getName(), file.getContent());
+    var response = new FileDownloadedDto(file.getFileID(), file.getName(), file.getContent());
+
+    response.add(linkTo(
+        methodOn(UserController.class).getUserById(file.getMap().getUser().getUserID())
+    ).withRel("user"));
+
+    return response;
   }
 }
