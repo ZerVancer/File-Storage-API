@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.UUID;
 
@@ -12,13 +13,10 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
-public class User {
+public class User extends RepresentationModel<User> {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID userID;
-
-  @Column(nullable = false)
-  private String name;
 
   @Column(nullable = false)
   private String eMail;
