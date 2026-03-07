@@ -18,6 +18,9 @@ public class User {
   private UUID userID;
 
   @Column(nullable = false)
+  private String name;
+
+  @Column(nullable = false)
   private String eMail;
 
   @Column(nullable = false)

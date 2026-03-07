@@ -23,7 +23,7 @@ public class FileController {
   public ResponseEntity<FileUploadedDto> uploadFile(
       @PathVariable UUID userID,
       @RequestHeader(value = "mapID", required = false) UUID mapID,
-      @RequestHeader("name") String name,
+      @RequestParam String name,
       @RequestBody String content) {
 
     File file = fileService.saveFile(userID, mapID, name, content);
@@ -32,7 +32,7 @@ public class FileController {
   }
 
   @DeleteMapping("/{fileID}")
-  public ResponseEntity<FileDeletedDto> deletFile(
+  public ResponseEntity<FileDeletedDto> deleteFile(
       @PathVariable UUID fileID
   ) {
     File file = fileService.deleteFile(fileID);
