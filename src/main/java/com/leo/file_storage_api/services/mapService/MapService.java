@@ -33,7 +33,7 @@ public class MapService {
   }
 
   public Map findMapByUserIDAndLocation(UUID userID, String location) {
-    return mapRepository.findByUser_UserIDAndLocation(userID, location).orElse(null);
+    return mapRepository.findByUser_UserIDAndName(userID, location).orElse(null);
   }
 
   public boolean mapBelongsToUser(Map map, User user) {

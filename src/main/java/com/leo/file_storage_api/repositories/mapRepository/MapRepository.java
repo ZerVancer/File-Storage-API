@@ -10,5 +10,5 @@ import java.util.UUID;
 @Repository
 public interface MapRepository extends JpaRepository<Map, UUID> {
   Optional<Map> findByMapID(UUID mapID);
-  Optional<Map> findByUser_UserIDAndLocation(UUID userID, String location);
+  Optional<Map> findByUser_UserIDAndName(UUID userID, String name);
 }
