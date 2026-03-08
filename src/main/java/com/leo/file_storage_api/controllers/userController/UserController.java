@@ -46,21 +46,22 @@ public class UserController {
     }
   }
 
-  @GetMapping("/{userID}")
-  public ResponseEntity<UserGetDto> getUserById(
-      @PathVariable UUID userID
-  ) {
-    return ResponseEntity.ok(UserGetDto.from(userService.getUser(userID)));
-  }
-
-  @GetMapping("/get-all")
-  public ResponseEntity<List<UserGetDto>> getAllUsers() {
-    List<UserGetDto> list = new ArrayList<>();
-
-    for (User user : userService.getAllUsers()) {
-      list.add(UserGetDto.from(user));
-    }
-
-    return ResponseEntity.ok(list);
-  }
+//  These are Admin commands and can be constrained with an Admin role when implemented
+//  @GetMapping("/{userID}")
+//  public ResponseEntity<UserGetDto> getUserById(
+//      @PathVariable UUID userID
+//  ) {
+//    return ResponseEntity.ok(UserGetDto.from(userService.getUser(userID)));
+//  }
+//
+//  @GetMapping("/get-all")
+//  public ResponseEntity<List<UserGetDto>> getAllUsers() {
+//    List<UserGetDto> list = new ArrayList<>();
+//
+//    for (User user : userService.getAllUsers()) {
+//      list.add(UserGetDto.from(user));
+//    }
+//
+//    return ResponseEntity.ok(list);
+//  }
 }
