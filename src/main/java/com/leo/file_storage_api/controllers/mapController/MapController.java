@@ -1,7 +1,9 @@
 package com.leo.file_storage_api.controllers.mapController;
 
+import com.leo.file_storage_api.dtos.fileDtos.FileGetDto;
 import com.leo.file_storage_api.dtos.mapDtos.MapGetDto;
 import com.leo.file_storage_api.dtos.mapDtos.MapRegisteredDto;
+import com.leo.file_storage_api.models.file.File;
 import com.leo.file_storage_api.models.map.Map;
 import com.leo.file_storage_api.models.user.User;
 import com.leo.file_storage_api.requests.mapRequests.CreateMapRequest;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,9 +43,15 @@ public class MapController {
   }
 
   @GetMapping("/get-all")
-  public ResponseEntity<List<Map>> getAll(
+  public ResponseEntity<List<MapGetDto>> getAll(
       @AuthenticationPrincipal User user
   ) {
-    return ResponseEntity.ok(mapService.getAll(user));
+    List<MapGetDto> list = new ArrayList<>();
+
+    for (Map map : mapService.getAll(user)) {
+      list.add(MapGetDto.from(map));
+    }
+
+    return ResponseEntity.ok(list);
   }
 }

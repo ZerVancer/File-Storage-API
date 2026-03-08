@@ -1,8 +1,10 @@
 package com.leo.file_storage_api.controllers.userController;
 
 import com.leo.file_storage_api.dtos.authDtos.InvalidCredentialsException;
+import com.leo.file_storage_api.dtos.mapDtos.MapGetDto;
 import com.leo.file_storage_api.dtos.userDtos.UserGetDto;
 import com.leo.file_storage_api.dtos.userDtos.UserRegisteredDto;
+import com.leo.file_storage_api.models.map.Map;
 import com.leo.file_storage_api.models.user.User;
 import com.leo.file_storage_api.requests.userRequests.CreateUserRequest;
 import com.leo.file_storage_api.requests.userRequests.LoginUserRequest;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,7 +54,13 @@ public class UserController {
   }
 
   @GetMapping("/get-all")
-  public ResponseEntity<List<User>> getAllUsers() {
-    return ResponseEntity.ok(userService.getAllUsers());
+  public ResponseEntity<List<UserGetDto>> getAllUsers() {
+    List<UserGetDto> list = new ArrayList<>();
+
+    for (User user : userService.getAllUsers()) {
+      list.add(UserGetDto.from(user));
+    }
+
+    return ResponseEntity.ok(list);
   }
 }

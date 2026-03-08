@@ -2,6 +2,7 @@ package com.leo.file_storage_api.controllers.fileController;
 
 import com.leo.file_storage_api.dtos.fileDtos.FileDeletedDto;
 import com.leo.file_storage_api.dtos.fileDtos.FileDownloadedDto;
+import com.leo.file_storage_api.dtos.fileDtos.FileGetDto;
 import com.leo.file_storage_api.dtos.fileDtos.FileUploadedDto;
 import com.leo.file_storage_api.models.file.File;
 import com.leo.file_storage_api.models.user.User;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,17 +55,29 @@ public class FileController {
   }
 
   @GetMapping("/get-all/{mapID}")
-  public ResponseEntity<List<File>> getAllByMapID(
+  public ResponseEntity<List<FileGetDto>> getAllByMapID(
       @PathVariable UUID mapID,
       @AuthenticationPrincipal User user
   ) {
-    return ResponseEntity.ok(fileService.getAllByMapID(mapID));
+    List<FileGetDto> list = new ArrayList<>();
+
+    for (File file : fileService.getAllByMapID(mapID)) {
+      list.add(FileGetDto.from(file));
+    }
+
+    return ResponseEntity.ok(list);
   }
 
   @GetMapping("get-all")
-  public ResponseEntity<List<File>> getAll(
+  public ResponseEntity<List<FileGetDto>> getAll(
       @AuthenticationPrincipal User user
   ) {
-    return ResponseEntity.ok(fileService.getAll(user));
+    List<FileGetDto> list = new ArrayList<>();
+
+    for (File file : fileService.getAll(user)) {
+      list.add(FileGetDto.from(file));
+    }
+
+    return ResponseEntity.ok(list);
   }
 }
