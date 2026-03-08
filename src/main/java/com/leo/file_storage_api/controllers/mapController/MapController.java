@@ -3,11 +3,13 @@ package com.leo.file_storage_api.controllers.mapController;
 import com.leo.file_storage_api.dtos.mapDtos.MapGetDto;
 import com.leo.file_storage_api.dtos.mapDtos.MapRegisteredDto;
 import com.leo.file_storage_api.models.map.Map;
+import com.leo.file_storage_api.models.user.User;
 import com.leo.file_storage_api.requests.mapRequests.CreateMapRequest;
 import com.leo.file_storage_api.services.mapService.MapService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,26 +21,28 @@ import java.util.UUID;
 public class MapController {
   private MapService mapService;
 
-  @PostMapping("/{userID}")
+  @PostMapping("/create")
   public ResponseEntity<MapRegisteredDto> createMap(
-      @PathVariable UUID userID,
-      @RequestBody CreateMapRequest request
+      @RequestBody CreateMapRequest request,
+      @AuthenticationPrincipal User user
       ){
 
-    Map map = mapService.createMap(userID, request.name());
+    Map map = mapService.createMap(user.getUserID(), request.name());
 
     return ResponseEntity.status(HttpStatus.CREATED).body(MapRegisteredDto.from(map));
   }
 
   @GetMapping("/{mapID}")
   public ResponseEntity<MapGetDto> getMapById(
-      @RequestParam UUID mapID
+      @PathVariable UUID mapID
   ) {
     return ResponseEntity.ok(MapGetDto.from(mapService.getMap(mapID)));
   }
 
-  @GetMapping
-  public ResponseEntity<List<Map>> getAll() {
-    return ResponseEntity.ok(mapService.getAll());
+  @GetMapping("/get-all")
+  public ResponseEntity<List<Map>> getAll(
+      @AuthenticationPrincipal User user
+  ) {
+    return ResponseEntity.ok(mapService.getAll(user));
   }
 }

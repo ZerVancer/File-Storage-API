@@ -2,13 +2,14 @@ package com.leo.file_storage_api.controllers.fileController;
 
 import com.leo.file_storage_api.dtos.fileDtos.FileDeletedDto;
 import com.leo.file_storage_api.dtos.fileDtos.FileDownloadedDto;
-import com.leo.file_storage_api.dtos.fileDtos.FileGetDto;
 import com.leo.file_storage_api.dtos.fileDtos.FileUploadedDto;
 import com.leo.file_storage_api.models.file.File;
+import com.leo.file_storage_api.models.user.User;
 import com.leo.file_storage_api.services.fileService.FileService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,14 +21,15 @@ import java.util.UUID;
 public class FileController {
   private FileService fileService;
 
-  @PostMapping("/{userID}")
+  @PostMapping("/create")
   public ResponseEntity<FileUploadedDto> uploadFile(
-      @PathVariable UUID userID,
       @RequestHeader(value = "mapID", required = false) UUID mapID,
       @RequestParam String name,
-      @RequestBody String content) {
+      @RequestBody String content,
+      @AuthenticationPrincipal User user
+  ) {
 
-    File file = fileService.saveFile(userID, mapID, name, content);
+    File file = fileService.saveFile(user.getUserID(), mapID, name, content);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(FileUploadedDto.from(file));
   }
@@ -50,8 +52,18 @@ public class FileController {
     return ResponseEntity.ok(FileDownloadedDto.from(file));
   }
 
-  @GetMapping
-  public ResponseEntity<List<File>> getAll() {
-    return ResponseEntity.ok(fileService.getAll());
+  @GetMapping("/get-all/{mapID}")
+  public ResponseEntity<List<File>> getAllByMapID(
+      @PathVariable UUID mapID,
+      @AuthenticationPrincipal User user
+  ) {
+    return ResponseEntity.ok(fileService.getAllByMapID(mapID));
+  }
+
+  @GetMapping("get-all")
+  public ResponseEntity<List<File>> getAll(
+      @AuthenticationPrincipal User user
+  ) {
+    return ResponseEntity.ok(fileService.getAll(user));
   }
 }

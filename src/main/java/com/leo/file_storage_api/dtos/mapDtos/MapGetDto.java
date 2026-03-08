@@ -1,6 +1,6 @@
 package com.leo.file_storage_api.dtos.mapDtos;
 
-import com.leo.file_storage_api.controllers.userController.UserController;
+import com.leo.file_storage_api.controllers.fileController.FileController;
 import com.leo.file_storage_api.models.map.Map;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,8 +27,8 @@ public class MapGetDto extends RepresentationModel<MapGetDto> {
     var response = new MapGetDto(map.getMapID(), map.getName());
 
     response.add(linkTo(
-        methodOn(UserController.class).getUserById(map.getUser().getUserID())
-    ).withRel("user"));
+        methodOn(FileController.class).getAllByMapID(map.getMapID(), map.getUser())
+    ).withRel("files"));
 
     return response;
   }

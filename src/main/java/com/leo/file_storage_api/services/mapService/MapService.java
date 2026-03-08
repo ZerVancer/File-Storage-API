@@ -4,6 +4,7 @@ import com.leo.file_storage_api.exceptions.mapExceptions.MapNotFoundException;
 import com.leo.file_storage_api.models.map.Map;
 import com.leo.file_storage_api.models.user.User;
 import com.leo.file_storage_api.repositories.mapRepository.MapRepository;
+import com.leo.file_storage_api.services.fileService.FileService;
 import com.leo.file_storage_api.services.userService.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class MapService {
   private MapRepository mapRepository;
-
   private UserService userService;
 
   public Map createMap(UUID userID, String name) {
@@ -24,8 +24,8 @@ public class MapService {
     return mapRepository.save(new Map(name, user));
   }
 
-  public List<Map> getAll() {
-    return mapRepository.findAll();
+  public List<Map> getAll(User user) {
+    return mapRepository.findAllByUser_UserID(user.getUserID());
   }
 
   public Map getMap(UUID mapID) {

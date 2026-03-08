@@ -38,17 +38,22 @@ public class FileService {
   }
 
   public File deleteFile(UUID fileID) {
-    File file = fileRepository.getByFileID(fileID).orElse(null);
+    File file = fileRepository.findByFileID(fileID).orElse(null);
     fileRepository.deleteById(fileID);
 
     return file;
   }
 
-  public List<File> getAll() {
-    return fileRepository.findAll();
+  public List<File> getAll(User user) {
+    return fileRepository.findAllByMap_User_UserID(user.getUserID());
   }
 
+  public List<File> getAllByMapID(UUID mapID) {
+    return fileRepository.findAllByMap_MapID(mapID);
+  }
+
+
   public File getByFileID(UUID fileID) {
-    return fileRepository.getByFileID(fileID).orElseThrow(FileNotFoundException::new);
+    return fileRepository.findByFileID(fileID).orElseThrow(FileNotFoundException::new);
   }
 }

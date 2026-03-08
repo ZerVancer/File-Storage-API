@@ -4,6 +4,7 @@ import com.leo.file_storage_api.models.map.Map;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -11,4 +12,5 @@ import java.util.UUID;
 public interface MapRepository extends JpaRepository<Map, UUID> {
   Optional<Map> findByMapID(UUID mapID);
   Optional<Map> findByUser_UserIDAndName(UUID userID, String name);
+  List<Map> findAllByUser_UserID(UUID userUserID);
 }
