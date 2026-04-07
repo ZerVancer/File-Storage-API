@@ -2,7 +2,6 @@ package com.leo.file_storage_api.dtos.fileDtos;
 
 import com.leo.file_storage_api.controllers.mapController.MapController;
 import com.leo.file_storage_api.models.file.File;
-import com.leo.file_storage_api.models.map.Map;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
@@ -30,7 +29,7 @@ public class FileGetDto extends RepresentationModel<FileGetDto> {
     var response = new FileGetDto(file.getFileID(), file.getName(), file.getContent());
 
     response.add(linkTo(
-        methodOn(MapController.class).getMapById(file.getMap().getMapID())
+        methodOn(MapController.class).getMapById(file.getMap().getMapID(), file.getMap().getUser())
     ).withRel("map"));
 
     return response;

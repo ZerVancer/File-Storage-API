@@ -4,6 +4,7 @@ import com.leo.file_storage_api.dtos.fileDtos.FileDeletedDto;
 import com.leo.file_storage_api.dtos.fileDtos.FileDownloadedDto;
 import com.leo.file_storage_api.dtos.fileDtos.FileGetDto;
 import com.leo.file_storage_api.dtos.fileDtos.FileUploadedDto;
+import com.leo.file_storage_api.exceptions.authExceptions.InvalidIdException;
 import com.leo.file_storage_api.models.file.File;
 import com.leo.file_storage_api.models.user.User;
 import com.leo.file_storage_api.services.fileService.FileService;
@@ -33,25 +34,30 @@ public class FileController {
 
     File file = fileService.saveFile(user.getUserID(), mapID, name, content);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(FileUploadedDto.from(file));
+    if (correctUser(file, user)) return ResponseEntity.status(HttpStatus.CREATED).body(FileUploadedDto.from(file));
+    throw new InvalidIdException();
   }
 
   @DeleteMapping("/{fileID}")
   public ResponseEntity<FileDeletedDto> deleteFile(
-      @PathVariable UUID fileID
+      @PathVariable UUID fileID,
+      @AuthenticationPrincipal User user
   ) {
     File file = fileService.deleteFile(fileID);
 
-    return ResponseEntity.status(HttpStatus.ACCEPTED).body(FileDeletedDto.from(file));
+    if (correctUser(file, user)) return ResponseEntity.status(HttpStatus.ACCEPTED).body(FileDeletedDto.from(file));
+    throw new InvalidIdException();
   }
 
   @GetMapping("/{fileID}")
   public ResponseEntity<FileDownloadedDto> downloadFile(
-      @PathVariable UUID fileID
+      @PathVariable UUID fileID,
+      @AuthenticationPrincipal User user
   ) {
     File file = fileService.getByFileID(fileID);
 
-    return ResponseEntity.ok(FileDownloadedDto.from(file));
+    if (correctUser(file, user)) return ResponseEntity.ok(FileDownloadedDto.from(file));
+    throw new InvalidIdException();
   }
 
   @GetMapping("/get-all/{mapID}")
@@ -65,7 +71,8 @@ public class FileController {
       list.add(FileGetDto.from(file));
     }
 
-    return ResponseEntity.ok(list);
+    if (correctUser(fileService.getByFileID(list.getFirst().getFileID()), user)) return ResponseEntity.ok(list);
+    throw new InvalidIdException();
   }
 
   @GetMapping("get-all")
@@ -78,6 +85,11 @@ public class FileController {
       list.add(FileGetDto.from(file));
     }
 
-    return ResponseEntity.ok(list);
+    if (correctUser(fileService.getByFileID(list.getFirst().getFileID()), user)) return ResponseEntity.ok(list);
+    throw new InvalidIdException();
+  }
+
+  private boolean correctUser(File file, User user) {
+    return file.getMap().getUser().getUserID().equals(user.getUserID());
   }
 }

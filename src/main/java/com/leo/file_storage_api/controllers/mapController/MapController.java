@@ -1,9 +1,8 @@
 package com.leo.file_storage_api.controllers.mapController;
 
-import com.leo.file_storage_api.dtos.fileDtos.FileGetDto;
 import com.leo.file_storage_api.dtos.mapDtos.MapGetDto;
 import com.leo.file_storage_api.dtos.mapDtos.MapRegisteredDto;
-import com.leo.file_storage_api.models.file.File;
+import com.leo.file_storage_api.exceptions.authExceptions.InvalidIdException;
 import com.leo.file_storage_api.models.map.Map;
 import com.leo.file_storage_api.models.user.User;
 import com.leo.file_storage_api.requests.mapRequests.CreateMapRequest;
@@ -32,14 +31,19 @@ public class MapController {
 
     Map map = mapService.createMap(user.getUserID(), request.name());
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(MapRegisteredDto.from(map));
+    if (correctUser(map, user)) return ResponseEntity.status(HttpStatus.CREATED).body(MapRegisteredDto.from(map));
+    throw new InvalidIdException();
   }
 
   @GetMapping("/{mapID}")
   public ResponseEntity<MapGetDto> getMapById(
-      @PathVariable UUID mapID
+      @PathVariable UUID mapID,
+      @AuthenticationPrincipal User user
   ) {
-    return ResponseEntity.ok(MapGetDto.from(mapService.getMap(mapID)));
+    Map map = mapService.getMap(mapID);
+
+    if (correctUser(map, user)) return ResponseEntity.ok(MapGetDto.from(map));
+    throw new InvalidIdException();
   }
 
   @GetMapping("/get-all")
@@ -52,6 +56,11 @@ public class MapController {
       list.add(MapGetDto.from(map));
     }
 
-    return ResponseEntity.ok(list);
+    if (correctUser(mapService.getMap(list.getFirst().getMapID()), user)) return ResponseEntity.ok(list);
+    throw new InvalidIdException();
+  }
+
+  private boolean correctUser(Map map, User user) {
+    return map.getUser().getUserID().equals(user.getUserID());
   }
 }

@@ -26,7 +26,7 @@ public class FileDeletedDto extends RepresentationModel<FileUploadedDto> {
     var response = new FileDeletedDto(file.getFileID());
 
     response.add(linkTo(
-        methodOn(MapController.class).getMapById(file.getMap().getMapID())
+        methodOn(MapController.class).getMapById(file.getMap().getMapID(), file.getMap().getUser())
     ).withRel("map"));
 
     response.add(linkTo(
